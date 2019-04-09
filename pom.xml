@@ -53,6 +53,7 @@
     </distributionManagement>
 
     <properties>
+        <codeCoverage>95</codeCoverage>
         <java.version>1.8</java.version>
         <junit.jupiter.version>5.2.0</junit.jupiter.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
@@ -386,13 +387,13 @@
                     <version>2.7</version>
                     <configuration>
                         <check>
-                            <branchRate>85</branchRate>
-                            <lineRate>85</lineRate>
+                            <branchRate>${codeCoverage}</branchRate>
+                            <lineRate>${codeCoverage}</lineRate>
                             <haltOnFailure>true</haltOnFailure>
-                            <totalBranchRate>85</totalBranchRate>
-                            <totalLineRate>85</totalLineRate>
-                            <packageLineRate>85</packageLineRate>
-                            <packageBranchRate>85</packageBranchRate>
+                            <totalBranchRate>${codeCoverage}</totalBranchRate>
+                            <totalLineRate>${codeCoverage}</totalLineRate>
+                            <packageLineRate>${codeCoverage}</packageLineRate>
+                            <packageBranchRate>${codeCoverage}</packageBranchRate>
                         </check>
                         <formats>
                             <format>html</format>
