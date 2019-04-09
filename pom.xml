@@ -78,6 +78,13 @@
                 <version>${junit.jupiter.version}</version>
                 <scope>test</scope>
             </dependency>
+            <!-- https://mvnrepository.com/artifact/com.github.xapn/test-as-you-think-core -->
+            <dependency>
+                <groupId>com.github.xapn</groupId>
+                <artifactId>test-as-you-think-core</artifactId>
+                <version>0.8-m1</version>
+                <scope>test</scope>
+            </dependency>
             <!-- https://mvnrepository.com/artifact/org.assertj/assertj-core -->
             <dependency>
                 <groupId>org.assertj</groupId>
@@ -115,6 +122,10 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-params</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.xapn</groupId>
+            <artifactId>test-as-you-think-core</artifactId>
         </dependency>
         <dependency>
             <groupId>org.assertj</groupId>
