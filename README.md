@@ -23,6 +23,14 @@ git config user.name "Your Pseudo" # if needed
 
 Take advantage of your IDE shortcuts while resolving any code kata. Download and print the [keymap](https://resources.jetbrains.com/storage/products/intellij-idea/docs/IntelliJIDEA_ReferenceCard.pdf) of IntelliJ IDEA.
 
+### Command Line Interface as a GUI
+
+You can invoke a standalone JAR after building it with the "standalone" Maven profile.
+```
+mvn package -Pstandalone # to build it
+java -jar target/kata-standalone.jar # to use it
+```
+
 ## License
 
 This code kata boilerplate is distributed under the GNU GPLv3 license. The GPLv3 license is included in the LICENSE.txt file. More information about this license is available at [GNU.org](http://www.gnu.org).
