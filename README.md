@@ -11,7 +11,8 @@ Use the below badge if you use TestAsYouThink Core to write high-quality tests.
 
 ## Getting started
 
-Fork this [repository](https://github.com/chrysocode/java-code-kata-boilerplate) at first, then replace the artifact coordinates used by the build system. Name the code kata too.
+Fork this [repository](https://github.com/chrysocode/java-code-kata-boilerplate) at first, then replace the artifact coordinates used by the build system. Name the code kata too.  
+Make changes only in the "develop" branch.
 
 ### Tips
 
@@ -29,6 +30,13 @@ You can invoke a standalone JAR after building it with the "standalone" Maven pr
 ```
 mvn package -Pstandalone # to build it
 java -jar target/kata-standalone.jar # to use it
+```
+
+### Updating your fork
+
+Update your fork as follows. It is assumed you did not commit in the "master" branch. Otherwise please send me a pull request.
+```
+git fetch origin master && git rebase -p --onto origin/master master develop && git branch -f master origin/master
 ```
 
 ## License
