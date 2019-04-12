@@ -39,6 +39,16 @@ Update your fork as follows. It is assumed you did not commit in the "master" br
 git fetch origin master && git rebase -p --onto origin/master master develop && git branch -f master origin/master
 ```
 
+## Definition of Done (DoD)
+
+What should be a DoD for the code katas?
+- The kata is done by applying [Test-Driven Development (TDD)](https://en.wikipedia.org/wiki/Test-driven_development).
+- The code is versioned by applying [TDDflow](https://gearsoftesting.org/tddflow.html).
+- The path to the solution is discovered according to the [Transformation Priority Premise](https://en.wikipedia.org/wiki/Transformation_Priority_Premise).
+- The path of successive transformations is as simple as possible.
+- The code coverage is greater than 95%.
+- The problem to solve is described in the kata documentation.
+
 ## License
 
 This code kata boilerplate is distributed under the GNU GPLv3 license. The GPLv3 license is included in the LICENSE.txt file. More information about this license is available at [GNU.org](http://www.gnu.org).
