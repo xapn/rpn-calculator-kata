@@ -1,3 +1,7 @@
+# Code Kata: \<name it\>
+
+What code kata do you choose to solve today? Explain the game rules here. Please keep explanations below about the boilerplate as it is.
+
 # Code Kata Boilerplate for Java 8
 
 [![LoC](https://tokei.rs/b1/github/chrysocode/java-code-kata-boilerplate?category=code)](https://github.com/chrysocode/java-code-kata-boilerplate)
