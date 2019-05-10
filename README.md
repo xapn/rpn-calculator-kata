@@ -11,8 +11,9 @@ Use the below badge if you use TestAsYouThink Core to write high-quality tests.
 
 ## Getting started
 
-Fork this [repository](https://github.com/chrysocode/java-code-kata-boilerplate) at first, then replace the artifact coordinates used by the build system. Name the code kata too.  
-Make changes only in the "develop" branch.
+Firstly, either you fork this [repository](https://github.com/chrysocode/java-code-kata-boilerplate) to put all your katas in the same repository, either you create a new repository per kata and push the kata boilerplate into it. Then replace the artifact coordinates used by the build system. Name the code kata too.  
+Make changes only in the "kata" branch.  
+You can use this shortened link if needed: [tinyurl.com/yyekn5rf](https://tinyurl.com/yyekn5rf).
 
 ### Tips
 
