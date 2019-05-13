@@ -33,19 +33,20 @@ public class RpnCalculator {
     private static final String DIGITS_REGEX = "^[0-9]+$";
 
     public Integer compute(final String expression) {
-        final Deque<Integer> deque = new ArrayDeque<>();
+        final Deque<Integer> operands = new ArrayDeque<>();
+
         stream(expression.split(EXPRESSION_SEPARATOR)).forEach(symbol -> {
             if (isOperand(symbol)) {
-                deque.addLast(Integer.parseInt(symbol));
+                operands.addLast(Integer.parseInt(symbol));
             } else if (Operator.isOperator(symbol)) {
-                Integer right = deque.removeLast();
-                Integer left = deque.removeLast();
-                deque.addLast(Operator
+                Integer right = operands.removeLast();
+                Integer left = operands.removeLast();
+                operands.addLast(Operator
                         .of(symbol)
                         .apply(left, right));
             }
         });
-        return deque.removeLast();
+        return operands.removeLast();
     }
 
     private boolean isOperand(String symbol) {
