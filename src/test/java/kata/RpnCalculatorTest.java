@@ -25,28 +25,17 @@ package kata;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static testasyouthink.TestAsYouThink.givenSut;
-import static testasyouthink.TestAsYouThink.resultOf;
 import static testasyouthink.TestAsYouThink.when;
 
 class RpnCalculatorTest {
 
     @Test
-    void should_behave_given_context() {
-        // Choose the proper syntax for your test case.
-
-        resultOf(() -> "TestAsYouThink").isEqualTo("TestAsYouThink");
-
-        when(() -> "TestAsYouThink").then(result -> {
-            assertThat(result)
-                    .startsWith("Test")
-                    .hasSize(14);
+    void should_return_X_given_0_as_a_value_of_X() {
+        when(() -> {
+            String expression = "0";
+            return 0;
+        }).then(result -> {
+            assertThat(result).isEqualTo(0);
         });
-
-        givenSut(StringBuilder::new)
-                .whenSutRuns(sut -> sut
-                        .append("TestAsYouThink")
-                        .reverse())
-                .then(sut -> assertThat(sut).containsSequence("knihTuoYsAtseT"));
     }
 }
