@@ -26,8 +26,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import testasyouthink.GivenWhenThenDsl.PreparationStage.Given;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BinaryOperator;
@@ -106,63 +104,5 @@ class RpnCalculatorTest {
                 .then(result -> {
                     assertThat(result).isEqualTo(4);
                 });
-    }
-
-    enum Operator {
-
-        ADDITION("+", Math::addExact), //
-        SUBTRACTION("-", Math::subtractExact), //
-        MULTIPLICATION("*", Math::multiplyExact), //
-        DIVISION("/", Math::floorDiv);
-
-        private static final Map<String, BinaryOperator<Integer>> OPERATORS;
-
-        static {
-            OPERATORS = new HashMap<>(values().length);
-            stream(values()).forEach(op -> OPERATORS.put(op.symbol, op.operator));
-        }
-
-        private final String symbol;
-        private final BinaryOperator<Integer> operator;
-
-        Operator(String symbol, BinaryOperator<Integer> operator) {
-            this.symbol = symbol;
-            this.operator = operator;
-        }
-
-        public static BinaryOperator<Integer> of(String symbol) {
-            return OPERATORS.get(symbol);
-        }
-    }
-
-    public static class RpnCalculator {
-
-        private static final String EXPRESSION_SEPARATOR = " ";
-        private static final String DIGITS_REGEX = "^[0-9]+$";
-        private static final String OPERATORS_REGEX = "^[+-\\\\*/]$";
-
-        Integer compute(final String expression) {
-            final Deque<Integer> deque = new ArrayDeque<>();
-            stream(expression.split(EXPRESSION_SEPARATOR)).forEach(symbol -> {
-                if (isOperand(symbol)) {
-                    deque.addLast(Integer.parseInt(symbol));
-                } else if (isOperator(symbol)) {
-                    Integer right = deque.removeLast();
-                    Integer left = deque.removeLast();
-                    deque.addLast(Operator
-                            .of(symbol)
-                            .apply(left, right));
-                }
-            });
-            return deque.removeLast();
-        }
-
-        private boolean isOperand(String symbol) {
-            return symbol.matches(DIGITS_REGEX);
-        }
-
-        private boolean isOperator(String symbol) {
-            return symbol.matches(OPERATORS_REGEX);
-        }
     }
 }
