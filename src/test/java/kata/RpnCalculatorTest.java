@@ -27,7 +27,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
-import java.util.function.BiFunction;
+import java.util.function.BinaryOperator;
 
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
@@ -94,27 +94,39 @@ class RpnCalculatorTest {
             } else if (symbol.matches("^[+-\\\\*/]$")) {
                 Integer right = deque.removeLast();
                 Integer left = deque.removeLast();
-                BiFunction<Integer, Integer, Integer> operator;
-                switch (symbol) {
-                    case "+":
-                        operator = Math::addExact;
-                        break;
-                    case "-":
-                        operator = Math::subtractExact;
-                        break;
-                    case "*":
-                        operator = Math::multiplyExact;
-                        break;
-                    case "/":
-                        operator = Math::floorDiv;
-                        break;
-                    default:
-                        throw new RuntimeException("Not yet implemented!");
-                }
+                BinaryOperator<Integer> operator = stream(Operator.values())
+                        .filter(op -> symbol.equals(op.getSymbol()))
+                        .findAny()
+                        .get()
+                        .getOperator();
                 deque.addLast(operator.apply(left, right));
             }
         }
 
         return deque.getLast();
+    }
+
+    enum Operator {
+
+        ADDITION("+", Math::addExact), //
+        SUBTRACTION("-", Math::subtractExact), //
+        MULTIPLICATION("*", Math::multiplyExact), //
+        DIVISION("/", Math::floorDiv);
+
+        private final String symbol;
+        private final BinaryOperator<Integer> operator;
+
+        Operator(String symbol, BinaryOperator<Integer> operator) {
+            this.symbol = symbol;
+            this.operator = operator;
+        }
+
+        String getSymbol() {
+            return symbol;
+        }
+
+        BinaryOperator<Integer> getOperator() {
+            return operator;
+        }
     }
 }
