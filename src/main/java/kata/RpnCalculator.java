@@ -30,26 +30,24 @@ import static java.util.Arrays.stream;
 public class RpnCalculator {
 
     private static final String EXPRESSION_SEPARATOR = " ";
-    private static final String DIGITS_REGEX = "^[0-9]+$";
 
     public Integer compute(final String expression) {
         final Deque<Integer> operands = new ArrayDeque<>();
 
-        stream(expression.split(EXPRESSION_SEPARATOR)).forEach(symbol -> {
-            if (isOperand(symbol)) {
-                operands.addLast(Integer.parseInt(symbol));
-            } else if (Operator.isOperator(symbol)) {
-                Integer right = operands.removeLast();
-                Integer left = operands.removeLast();
-                operands.addLast(Operator
-                        .of(symbol)
-                        .apply(left, right));
-            }
-        });
+        stream(expression.split(EXPRESSION_SEPARATOR))
+                .map(Symbol::new)
+                .forEach(symbol -> {
+                    if (symbol.isOperand()) {
+                        operands.addLast(symbol.toOperand());
+                    } else if (symbol.isOperator()) {
+                        Integer right = operands.removeLast();
+                        Integer left = operands.removeLast();
+                        operands.addLast(symbol
+                                .toOperator()
+                                .apply(left, right));
+                    }
+                });
         return operands.removeLast();
     }
-
-    private boolean isOperand(String symbol) {
-        return symbol.matches(DIGITS_REGEX);
-    }
 }
+
