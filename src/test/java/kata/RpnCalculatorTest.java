@@ -26,7 +26,9 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.BinaryOperator;
 
 import static java.util.Arrays.stream;
@@ -94,11 +96,9 @@ class RpnCalculatorTest {
             } else if (symbol.matches("^[+-\\\\*/]$")) {
                 Integer right = deque.removeLast();
                 Integer left = deque.removeLast();
-                BinaryOperator<Integer> operator = stream(Operator.values())
-                        .filter(op -> symbol.equals(op.getSymbol()))
-                        .findAny()
-                        .get()
-                        .getOperator();
+                BinaryOperator<Integer> operator = Operator
+                        .getOperators()
+                        .get(symbol);
                 deque.addLast(operator.apply(left, right));
             }
         }
@@ -113,6 +113,13 @@ class RpnCalculatorTest {
         MULTIPLICATION("*", Math::multiplyExact), //
         DIVISION("/", Math::floorDiv);
 
+        private static final Map<String, BinaryOperator<Integer>> OPERATORS;
+
+        static {
+            OPERATORS = new HashMap<>(values().length);
+            stream(values()).forEach(op -> OPERATORS.put(op.symbol, op.operator));
+        }
+
         private final String symbol;
         private final BinaryOperator<Integer> operator;
 
@@ -121,12 +128,8 @@ class RpnCalculatorTest {
             this.operator = operator;
         }
 
-        String getSymbol() {
-            return symbol;
-        }
-
-        BinaryOperator<Integer> getOperator() {
-            return operator;
+        static Map<String, BinaryOperator<Integer>> getOperators() {
+            return OPERATORS;
         }
     }
 }
