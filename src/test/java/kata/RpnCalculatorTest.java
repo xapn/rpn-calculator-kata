@@ -31,11 +31,13 @@ class RpnCalculatorTest {
 
     @Test
     void should_return_X_given_0_as_a_value_of_X() {
-        when(() -> {
-            String expression = "0";
-            return 0;
-        }).then(result -> {
+        when(() -> compute()).then(result -> {
             assertThat(result).isEqualTo(0);
         });
+    }
+
+    Integer compute() {
+        String expression = "0";
+        return 0;
     }
 }
