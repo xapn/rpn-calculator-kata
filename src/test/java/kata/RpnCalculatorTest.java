@@ -24,7 +24,7 @@ package kata;
 
 import org.junit.jupiter.api.Test;
 
-import static java.lang.Integer.parseInt;
+import static java.util.Arrays.stream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static testasyouthink.TestAsYouThink.resultOf;
 import static testasyouthink.TestAsYouThink.when;
@@ -43,7 +43,16 @@ class RpnCalculatorTest {
         resultOf(() -> compute("1")).isEqualTo(1);
     }
 
+    @Test
+    void should_add_2_operands() {
+        when(() -> compute("1 2")).then(result -> {
+            assertThat(result).isEqualTo(3);
+        });
+    }
+
     Integer compute(String expression) {
-        return parseInt(expression);
+        return stream(expression.split(" "))
+                .map(Integer::parseInt)
+                .reduce(0, Math::addExact);
     }
 }
