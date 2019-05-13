@@ -96,10 +96,9 @@ class RpnCalculatorTest {
             } else if (symbol.matches("^[+-\\\\*/]$")) {
                 Integer right = deque.removeLast();
                 Integer left = deque.removeLast();
-                BinaryOperator<Integer> operator = Operator
-                        .getOperators()
-                        .get(symbol);
-                deque.addLast(operator.apply(left, right));
+                deque.addLast(Operator
+                        .of(symbol)
+                        .apply(left, right));
             }
         }
 
@@ -128,8 +127,8 @@ class RpnCalculatorTest {
             this.operator = operator;
         }
 
-        static Map<String, BinaryOperator<Integer>> getOperators() {
-            return OPERATORS;
+        public static BinaryOperator<Integer> of(String symbol) {
+            return OPERATORS.get(symbol);
         }
     }
 }
