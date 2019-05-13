@@ -70,6 +70,14 @@ class RpnCalculatorTest {
         });
     }
 
+    @Test
+    void should_multiply_2_operands() {
+        when(() -> compute("3 5 *")).then(result -> {
+            assertThat(result).isEqualTo(15);
+        });
+
+    }
+
     Integer compute(String expression) {
         List<String> symbols = stream(expression.split(" ")).collect(toList());
         Deque<Integer> deque = new ArrayDeque<>();
@@ -77,7 +85,7 @@ class RpnCalculatorTest {
         for (String symbol : symbols) {
             if (symbol.matches("^[0-9]+$")) {
                 deque.addLast(Integer.parseInt(symbol));
-            } else if (symbol.matches("^[+-]$")) {
+            } else if (symbol.matches("^[+-\\\\*]$")) {
                 Integer right = deque.removeLast();
                 Integer left = deque.removeLast();
                 BiFunction<Integer, Integer, Integer> operator;
@@ -87,6 +95,9 @@ class RpnCalculatorTest {
                         break;
                     case "-":
                         operator = Math::subtractExact;
+                        break;
+                    case "*":
+                        operator = Math::multiplyExact;
                         break;
                     default:
                         throw new RuntimeException("Not yet implemented!");
