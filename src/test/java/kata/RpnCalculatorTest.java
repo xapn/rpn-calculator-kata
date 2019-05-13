@@ -27,6 +27,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
+import java.util.function.BiFunction;
 
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
@@ -62,6 +63,13 @@ class RpnCalculatorTest {
         });
     }
 
+    @Test
+    void should_substract_2_operands() {
+        when(() -> compute("5 3 -")).then(result -> {
+            assertThat(result).isEqualTo(2);
+        });
+    }
+
     Integer compute(String expression) {
         List<String> symbols = stream(expression.split(" ")).collect(toList());
         Deque<Integer> deque = new ArrayDeque<>();
@@ -69,10 +77,21 @@ class RpnCalculatorTest {
         for (String symbol : symbols) {
             if (symbol.matches("^[0-9]+$")) {
                 deque.addLast(Integer.parseInt(symbol));
-            } else if (symbol.matches("^[+]$")) {
+            } else if (symbol.matches("^[+-]$")) {
                 Integer right = deque.removeLast();
                 Integer left = deque.removeLast();
-                deque.addLast(left + right);
+                BiFunction<Integer, Integer, Integer> operator;
+                switch (symbol) {
+                    case "+":
+                        operator = Math::addExact;
+                        break;
+                    case "-":
+                        operator = Math::subtractExact;
+                        break;
+                    default:
+                        throw new RuntimeException("Not yet implemented!");
+                }
+                deque.addLast(operator.apply(left, right));
             }
         }
 
