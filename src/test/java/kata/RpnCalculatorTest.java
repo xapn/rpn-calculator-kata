@@ -24,20 +24,26 @@ package kata;
 
 import org.junit.jupiter.api.Test;
 
+import static java.lang.Integer.parseInt;
 import static org.assertj.core.api.Assertions.assertThat;
+import static testasyouthink.TestAsYouThink.resultOf;
 import static testasyouthink.TestAsYouThink.when;
 
 class RpnCalculatorTest {
 
     @Test
     void should_return_X_given_0_as_a_value_of_X() {
-        when(() -> compute()).then(result -> {
+        when(() -> compute("0")).then(result -> {
             assertThat(result).isEqualTo(0);
         });
     }
 
-    Integer compute() {
-        String expression = "0";
-        return 0;
+    @Test
+    void should_return_X_given_1_as_a_value_of_X() {
+        resultOf(() -> compute("1")).isEqualTo(1);
+    }
+
+    Integer compute(String expression) {
+        return parseInt(expression);
     }
 }
