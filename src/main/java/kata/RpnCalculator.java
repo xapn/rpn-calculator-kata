@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -31,14 +31,13 @@ public class RpnCalculator {
 
     private static final String EXPRESSION_SEPARATOR = " ";
     private static final String DIGITS_REGEX = "^[0-9]+$";
-    private static final String OPERATORS_REGEX = "^[+-\\\\*/]$";
 
     public Integer compute(final String expression) {
         final Deque<Integer> deque = new ArrayDeque<>();
         stream(expression.split(EXPRESSION_SEPARATOR)).forEach(symbol -> {
             if (isOperand(symbol)) {
                 deque.addLast(Integer.parseInt(symbol));
-            } else if (isOperator(symbol)) {
+            } else if (Operator.isOperator(symbol)) {
                 Integer right = deque.removeLast();
                 Integer left = deque.removeLast();
                 deque.addLast(Operator
@@ -51,9 +50,5 @@ public class RpnCalculator {
 
     private boolean isOperand(String symbol) {
         return symbol.matches(DIGITS_REGEX);
-    }
-
-    private boolean isOperator(String symbol) {
-        return symbol.matches(OPERATORS_REGEX);
     }
 }
