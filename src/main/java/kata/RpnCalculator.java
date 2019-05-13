@@ -36,18 +36,20 @@ public class RpnCalculator {
 
         stream(expression.split(EXPRESSION_SEPARATOR))
                 .map(Symbol::new)
-                .forEach(symbol -> {
-                    if (symbol.isOperand()) {
-                        operands.addLast(symbol.toOperand());
-                    } else if (symbol.isOperator()) {
-                        Integer right = operands.removeLast();
-                        Integer left = operands.removeLast();
-                        operands.addLast(symbol
-                                .toOperator()
-                                .apply(left, right));
-                    }
-                });
+                .forEach(symbol -> computeSymbols(symbol, operands));
         return operands.removeLast();
+    }
+
+    private void computeSymbols(final Symbol symbol, final Deque<Integer> operands) {
+        if (symbol.isOperand()) {
+            operands.addLast(symbol.toOperand());
+        } else if (symbol.isOperator()) {
+            Integer right = operands.removeLast();
+            Integer left = operands.removeLast();
+            operands.addLast(symbol
+                    .toOperator()
+                    .apply(left, right));
+        }
     }
 }
 
