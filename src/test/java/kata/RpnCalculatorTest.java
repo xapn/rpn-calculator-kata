@@ -39,6 +39,10 @@ import static testasyouthink.TestAsYouThink.when;
 
 class RpnCalculatorTest {
 
+    private static final String EXPRESSION_SEPARATOR = " ";
+    private static final String DIGITS_REGEX = "^[0-9]+$";
+    private static final String OPERATORS_REGEX = "^[+-\\\\*/]$";
+
     @Test
     void should_return_X_given_0_as_a_value_of_X() {
         when(() -> compute("0")).then(result -> {
@@ -86,23 +90,28 @@ class RpnCalculatorTest {
         });
     }
 
-    Integer compute(String expression) {
-        List<String> symbols = stream(expression.split(" ")).collect(toList());
-        Deque<Integer> deque = new ArrayDeque<>();
-
-        for (String symbol : symbols) {
-            if (symbol.matches("^[0-9]+$")) {
+    Integer compute(final String expression) {
+        final Deque<Integer> deque = new ArrayDeque<>();
+        stream(expression.split(EXPRESSION_SEPARATOR)).forEach(symbol -> {
+            if (isOperand(symbol)) {
                 deque.addLast(Integer.parseInt(symbol));
-            } else if (symbol.matches("^[+-\\\\*/]$")) {
+            } else if (isOperator(symbol)) {
                 Integer right = deque.removeLast();
                 Integer left = deque.removeLast();
                 deque.addLast(Operator
                         .of(symbol)
                         .apply(left, right));
             }
-        }
+        });
+        return deque.removeLast();
+    }
 
-        return deque.getLast();
+    private boolean isOperand(String symbol) {
+        return symbol.matches(DIGITS_REGEX);
+    }
+
+    private boolean isOperator(String symbol) {
+        return symbol.matches(OPERATORS_REGEX);
     }
 
     enum Operator {
