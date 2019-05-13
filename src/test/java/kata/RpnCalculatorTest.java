@@ -24,7 +24,12 @@ package kata;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.List;
+
 import static java.util.Arrays.stream;
+import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static testasyouthink.TestAsYouThink.resultOf;
 import static testasyouthink.TestAsYouThink.when;
@@ -45,14 +50,32 @@ class RpnCalculatorTest {
 
     @Test
     void should_add_2_operands() {
-        when(() -> compute("1 2")).then(result -> {
+        when(() -> compute("1 2 +")).then(result -> {
             assertThat(result).isEqualTo(3);
         });
     }
 
+    @Test
+    void should_add_3_operands() {
+        when(() -> compute("1 2 + 4 +")).then(result -> {
+            assertThat(result).isEqualTo(7);
+        });
+    }
+
     Integer compute(String expression) {
-        return stream(expression.split(" "))
-                .map(Integer::parseInt)
-                .reduce(0, Math::addExact);
+        List<String> symbols = stream(expression.split(" ")).collect(toList());
+        Deque<Integer> deque = new ArrayDeque<>();
+
+        for (String symbol : symbols) {
+            if (symbol.matches("^[0-9]+$")) {
+                deque.addLast(Integer.parseInt(symbol));
+            } else if (symbol.matches("^[+]$")) {
+                Integer right = deque.removeLast();
+                Integer left = deque.removeLast();
+                deque.addLast(left + right);
+            }
+        }
+
+        return deque.getLast();
     }
 }
