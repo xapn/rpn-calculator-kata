@@ -22,96 +22,90 @@
 
 package kata;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import testasyouthink.GivenWhenThenDsl.PreparationStage.Given;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.BinaryOperator;
 
 import static java.util.Arrays.stream;
-import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
-import static testasyouthink.TestAsYouThink.resultOf;
-import static testasyouthink.TestAsYouThink.when;
+import static testasyouthink.TestAsYouThink.givenSutClass;
 
 class RpnCalculatorTest {
 
-    private static final String EXPRESSION_SEPARATOR = " ";
-    private static final String DIGITS_REGEX = "^[0-9]+$";
-    private static final String OPERATORS_REGEX = "^[+-\\\\*/]$";
+    private Given<RpnCalculator> givenRpnCalculatorAsSut;
+
+    @BeforeEach
+    void prepareFixture() {
+        givenRpnCalculatorAsSut = givenSutClass(RpnCalculator.class);
+    }
 
     @Test
     void should_return_X_given_0_as_a_value_of_X() {
-        when(() -> compute("0")).then(result -> {
-            assertThat(result).isEqualTo(0);
-        });
+        givenRpnCalculatorAsSut
+                .whenSutReturns(sut -> sut.compute("0"))
+                .then(result -> {
+                    assertThat(result).isEqualTo(0);
+                });
     }
 
     @Test
     void should_return_X_given_1_as_a_value_of_X() {
-        resultOf(() -> compute("1")).isEqualTo(1);
+        givenRpnCalculatorAsSut
+                .whenSutReturns(sut -> sut.compute("1"))
+                .then(result -> {
+                    assertThat(result).isEqualTo(1);
+                });
     }
 
     @Test
     void should_add_2_operands() {
-        when(() -> compute("1 2 +")).then(result -> {
-            assertThat(result).isEqualTo(3);
-        });
+        givenRpnCalculatorAsSut
+                .whenSutReturns(sut -> sut.compute("1 2 +"))
+                .then(result -> {
+                    assertThat(result).isEqualTo(3);
+                });
     }
 
     @Test
     void should_add_3_operands() {
-        when(() -> compute("1 2 + 4 +")).then(result -> {
-            assertThat(result).isEqualTo(7);
-        });
+        givenRpnCalculatorAsSut
+                .whenSutReturns(sut -> sut.compute("1 2 + 4 +"))
+                .then(result -> {
+                    assertThat(result).isEqualTo(7);
+                });
     }
 
     @Test
     void should_substract_2_operands() {
-        when(() -> compute("5 3 -")).then(result -> {
-            assertThat(result).isEqualTo(2);
-        });
+        givenRpnCalculatorAsSut
+                .whenSutReturns(sut -> sut.compute("5 3 -"))
+                .then(result -> {
+                    assertThat(result).isEqualTo(2);
+                });
     }
 
     @Test
     void should_multiply_2_operands() {
-        when(() -> compute("3 5 *")).then(result -> {
-            assertThat(result).isEqualTo(15);
-        });
+        givenRpnCalculatorAsSut
+                .whenSutReturns(sut -> sut.compute("3 5 *"))
+                .then(result -> {
+                    assertThat(result).isEqualTo(15);
+                });
     }
 
     @Test
     void should_divide_2_operands() {
-        when(() -> compute("20 5 /")).then(result -> {
-            assertThat(result).isEqualTo(4);
-        });
-    }
-
-    Integer compute(final String expression) {
-        final Deque<Integer> deque = new ArrayDeque<>();
-        stream(expression.split(EXPRESSION_SEPARATOR)).forEach(symbol -> {
-            if (isOperand(symbol)) {
-                deque.addLast(Integer.parseInt(symbol));
-            } else if (isOperator(symbol)) {
-                Integer right = deque.removeLast();
-                Integer left = deque.removeLast();
-                deque.addLast(Operator
-                        .of(symbol)
-                        .apply(left, right));
-            }
-        });
-        return deque.removeLast();
-    }
-
-    private boolean isOperand(String symbol) {
-        return symbol.matches(DIGITS_REGEX);
-    }
-
-    private boolean isOperator(String symbol) {
-        return symbol.matches(OPERATORS_REGEX);
+        givenRpnCalculatorAsSut
+                .whenSutReturns(sut -> sut.compute("20 5 /"))
+                .then(result -> {
+                    assertThat(result).isEqualTo(4);
+                });
     }
 
     enum Operator {
@@ -138,6 +132,37 @@ class RpnCalculatorTest {
 
         public static BinaryOperator<Integer> of(String symbol) {
             return OPERATORS.get(symbol);
+        }
+    }
+
+    public static class RpnCalculator {
+
+        private static final String EXPRESSION_SEPARATOR = " ";
+        private static final String DIGITS_REGEX = "^[0-9]+$";
+        private static final String OPERATORS_REGEX = "^[+-\\\\*/]$";
+
+        Integer compute(final String expression) {
+            final Deque<Integer> deque = new ArrayDeque<>();
+            stream(expression.split(EXPRESSION_SEPARATOR)).forEach(symbol -> {
+                if (isOperand(symbol)) {
+                    deque.addLast(Integer.parseInt(symbol));
+                } else if (isOperator(symbol)) {
+                    Integer right = deque.removeLast();
+                    Integer left = deque.removeLast();
+                    deque.addLast(Operator
+                            .of(symbol)
+                            .apply(left, right));
+                }
+            });
+            return deque.removeLast();
+        }
+
+        private boolean isOperand(String symbol) {
+            return symbol.matches(DIGITS_REGEX);
+        }
+
+        private boolean isOperator(String symbol) {
+            return symbol.matches(OPERATORS_REGEX);
         }
     }
 }
