@@ -75,7 +75,13 @@ class RpnCalculatorTest {
         when(() -> compute("3 5 *")).then(result -> {
             assertThat(result).isEqualTo(15);
         });
+    }
 
+    @Test
+    void should_divide_2_operands() {
+        when(() -> compute("20 5 /")).then(result -> {
+            assertThat(result).isEqualTo(4);
+        });
     }
 
     Integer compute(String expression) {
@@ -85,7 +91,7 @@ class RpnCalculatorTest {
         for (String symbol : symbols) {
             if (symbol.matches("^[0-9]+$")) {
                 deque.addLast(Integer.parseInt(symbol));
-            } else if (symbol.matches("^[+-\\\\*]$")) {
+            } else if (symbol.matches("^[+-\\\\*/]$")) {
                 Integer right = deque.removeLast();
                 Integer left = deque.removeLast();
                 BiFunction<Integer, Integer, Integer> operator;
@@ -98,6 +104,9 @@ class RpnCalculatorTest {
                         break;
                     case "*":
                         operator = Math::multiplyExact;
+                        break;
+                    case "/":
+                        operator = Math::floorDiv;
                         break;
                     default:
                         throw new RuntimeException("Not yet implemented!");
