@@ -1,6 +1,6 @@
 /*-
  * #%L
- * Code Kata
+ * RPN Calculator Kata
  * %%
  * Copyright (C) 2019 Chrysocode
  * %%
@@ -25,7 +25,7 @@ package kata;
 /**
  * Main class for command line interface.
  */
-public class KataCli {
+public class RpnCalculatorCli {
 
     public static void main(String[] args) {
         System.out.println("Master any code kata as a craftsman!");
