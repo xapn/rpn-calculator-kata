@@ -30,6 +30,8 @@ import static testasyouthink.TestAsYouThink.resultOf;
 
 class RpnCalculatorTest {
 
+    private static final String SYMBOL_SEPARATOR = " ";
+
     @Test
     void should_return_the_value_given_no_operator() {
         resultOf(() -> compute("0")).isEqualTo(0);
@@ -47,10 +49,18 @@ class RpnCalculatorTest {
 
     Integer compute(String expression) {
         return Pattern
-                .compile(" ")
+                .compile(SYMBOL_SEPARATOR)
                 .splitAsStream(expression)
-                .filter(symbol -> symbol.matches("^[0-9]+$"))
-                .mapToInt(Integer::parseInt)
+                .filter(this::isOperand)
+                .mapToInt(this::toOperand)
                 .sum();
+    }
+
+    private int toOperand(String symbol) {
+        return Integer.parseInt(symbol);
+    }
+
+    private boolean isOperand(String symbol) {
+        return symbol.matches("^[0-9]+$");
     }
 }
