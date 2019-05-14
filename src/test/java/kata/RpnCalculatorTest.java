@@ -74,6 +74,7 @@ class RpnCalculatorTest {
                 .splitAsStream(expression)
                 .map(Symbol::new)
                 .forEach(symbol -> symbol.compute(operands));
+
         return operands.removeLast();
     }
 
@@ -91,9 +92,7 @@ class RpnCalculatorTest {
             } else {
                 Integer rightOperand = operands.removeLast();
                 Integer leftOperand = operands.removeLast();
-
                 IntBinaryOperator operator = toOperator();
-
                 operands.addLast(operator.applyAsInt(leftOperand, rightOperand));
             }
         }
@@ -104,16 +103,28 @@ class RpnCalculatorTest {
 
         private IntBinaryOperator toOperator() {
             IntBinaryOperator operator;
-            if ("-".equals(symbol)) {
+            if (isMinus()) {
                 operator = Math::subtractExact;
-            } else if ("*".equals(symbol)) {
+            } else if (isMultiplication()) {
                 operator = Math::multiplyExact;
-            } else if ("/".equals(symbol)) {
+            } else if (isDivision()) {
                 operator = Math::floorDiv;
             } else {
                 operator = Math::addExact;
             }
             return operator;
+        }
+
+        private boolean isDivision() {
+            return "/".equals(symbol);
+        }
+
+        private boolean isMultiplication() {
+            return "*".equals(symbol);
+        }
+
+        private boolean isMinus() {
+            return "-".equals(symbol);
         }
 
         private boolean isOperand() {
