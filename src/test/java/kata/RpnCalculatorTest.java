@@ -61,6 +61,11 @@ class RpnCalculatorTest {
         resultOf(() -> compute("2 4 *")).isEqualTo(8);
     }
 
+    @Test
+    void should_divide_2_operands() {
+        resultOf(() -> compute("20 5 /")).isEqualTo(4);
+    }
+
     Integer compute(String expression) {
         Deque<Integer> operands = new ArrayDeque<>();
 
@@ -103,6 +108,8 @@ class RpnCalculatorTest {
                 operator = Math::subtractExact;
             } else if (symbol.endsWith("*")) {
                 operator = Math::multiplyExact;
+            } else if (symbol.endsWith("/")) {
+                operator = Math::floorDiv;
             } else {
                 operator = Math::addExact;
             }
