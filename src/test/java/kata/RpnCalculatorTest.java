@@ -26,6 +26,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.IntBinaryOperator;
 import java.util.regex.Pattern;
 
@@ -80,6 +82,19 @@ class RpnCalculatorTest {
 
     static class Symbol {
 
+        private static final Map<String, IntBinaryOperator> OPERATORS;
+
+        static {
+            OPERATORS = new HashMap<String, IntBinaryOperator>(4) {
+                {
+                    put("+", Math::addExact);
+                    put("-", Math::subtractExact);
+                    put("*", Math::multiplyExact);
+                    put("/", Math::floorDiv);
+                }
+            };
+        }
+
         private final String symbol;
 
         Symbol(String symbol) {
@@ -102,29 +117,7 @@ class RpnCalculatorTest {
         }
 
         private IntBinaryOperator toOperator() {
-            IntBinaryOperator operator;
-            if (isMinus()) {
-                operator = Math::subtractExact;
-            } else if (isMultiplication()) {
-                operator = Math::multiplyExact;
-            } else if (isDivision()) {
-                operator = Math::floorDiv;
-            } else {
-                operator = Math::addExact;
-            }
-            return operator;
-        }
-
-        private boolean isDivision() {
-            return "/".equals(symbol);
-        }
-
-        private boolean isMultiplication() {
-            return "*".equals(symbol);
-        }
-
-        private boolean isMinus() {
-            return "-".equals(symbol);
+            return OPERATORS.get(symbol);
         }
 
         private boolean isOperand() {
