@@ -24,7 +24,8 @@ package kata;
 
 import org.junit.jupiter.api.Test;
 
-import static java.lang.Integer.parseInt;
+import java.util.regex.Pattern;
+
 import static testasyouthink.TestAsYouThink.resultOf;
 
 class RpnCalculatorTest {
@@ -39,7 +40,16 @@ class RpnCalculatorTest {
         resultOf(() -> compute("1")).isEqualTo(1);
     }
 
+    @Test
+    void should_add_2_operands() {
+        resultOf(() -> compute("1 2")).isEqualTo(3);
+    }
+
     Integer compute(String expression) {
-        return parseInt(expression);
+        return Pattern
+                .compile(" ")
+                .splitAsStream(expression)
+                .mapToInt(Integer::parseInt)
+                .sum();
     }
 }
