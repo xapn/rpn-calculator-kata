@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -24,14 +24,6 @@ package kata;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.IntBinaryOperator;
-import java.util.regex.Pattern;
-
-import static java.lang.Integer.parseInt;
 import static testasyouthink.TestAsYouThink.resultOf;
 
 class RpnCalculatorTest {
@@ -64,67 +56,5 @@ class RpnCalculatorTest {
     @Test
     void should_divide_2_operands() {
         resultOf(() -> new RpnCalculator().compute("20 5 /")).isEqualTo(4);
-    }
-
-    static class RpnCalculator {
-
-        private static final String SYMBOL_SEPARATOR = " ";
-
-        Integer compute(String expression) {
-            Deque<Integer> operands = new ArrayDeque<>();
-
-            Pattern
-                    .compile(SYMBOL_SEPARATOR)
-                    .splitAsStream(expression)
-                    .map(Symbol::new)
-                    .forEach(symbol -> symbol.compute(operands));
-
-            return operands.removeLast();
-        }
-    }
-
-    static class Symbol {
-
-        private static final Map<String, IntBinaryOperator> OPERATORS;
-
-        static {
-            OPERATORS = new HashMap<String, IntBinaryOperator>(4) {
-                {
-                    put("+", Math::addExact);
-                    put("-", Math::subtractExact);
-                    put("*", Math::multiplyExact);
-                    put("/", Math::floorDiv);
-                }
-            };
-        }
-
-        private final String symbol;
-
-        Symbol(String symbol) {
-            this.symbol = symbol;
-        }
-
-        void compute(Deque<Integer> operands) {
-            if (isOperand()) {
-                operands.addLast(toOperand());
-            } else {
-                Integer rightOperand = operands.removeLast();
-                Integer leftOperand = operands.removeLast();
-                IntBinaryOperator operator = toOperator();
-                operands.addLast(operator.applyAsInt(leftOperand, rightOperand));
-            }
-        }
-
-        private int toOperand() {
-            return parseInt(symbol);
-        }
-
-        private IntBinaryOperator toOperator() {
-            return OPERATORS.get(symbol);
-        }
-
-        private boolean isOperand() {
-            return symbol.matches("^[0-9]+$");
-        }
     }
 }
