@@ -36,48 +36,51 @@ import static testasyouthink.TestAsYouThink.resultOf;
 
 class RpnCalculatorTest {
 
-    private static final String SYMBOL_SEPARATOR = " ";
-
     @Test
     void should_return_the_value_given_no_operator() {
-        resultOf(() -> compute("0")).isEqualTo(0);
+        resultOf(() -> new RpnCalculator().compute("0")).isEqualTo(0);
     }
 
     @Test
     void should_return_another_value_given_no_operator() {
-        resultOf(() -> compute("1")).isEqualTo(1);
+        resultOf(() -> new RpnCalculator().compute("1")).isEqualTo(1);
     }
 
     @Test
     void should_add_2_operands() {
-        resultOf(() -> compute("1 2 +")).isEqualTo(3);
+        resultOf(() -> new RpnCalculator().compute("1 2 +")).isEqualTo(3);
     }
 
     @Test
     void should_subtract_2_operands() {
-        resultOf(() -> compute("5 3 -")).isEqualTo(2);
+        resultOf(() -> new RpnCalculator().compute("5 3 -")).isEqualTo(2);
     }
 
     @Test
     void should_multiply_2_operands() {
-        resultOf(() -> compute("2 4 *")).isEqualTo(8);
+        resultOf(() -> new RpnCalculator().compute("2 4 *")).isEqualTo(8);
     }
 
     @Test
     void should_divide_2_operands() {
-        resultOf(() -> compute("20 5 /")).isEqualTo(4);
+        resultOf(() -> new RpnCalculator().compute("20 5 /")).isEqualTo(4);
     }
 
-    Integer compute(String expression) {
-        Deque<Integer> operands = new ArrayDeque<>();
+    static class RpnCalculator {
 
-        Pattern
-                .compile(SYMBOL_SEPARATOR)
-                .splitAsStream(expression)
-                .map(Symbol::new)
-                .forEach(symbol -> symbol.compute(operands));
+        private static final String SYMBOL_SEPARATOR = " ";
 
-        return operands.removeLast();
+        Integer compute(String expression) {
+            Deque<Integer> operands = new ArrayDeque<>();
+
+            Pattern
+                    .compile(SYMBOL_SEPARATOR)
+                    .splitAsStream(expression)
+                    .map(Symbol::new)
+                    .forEach(symbol -> symbol.compute(operands));
+
+            return operands.removeLast();
+        }
     }
 
     static class Symbol {
