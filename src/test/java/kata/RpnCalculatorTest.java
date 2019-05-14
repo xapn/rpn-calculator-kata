@@ -82,22 +82,27 @@ class RpnCalculatorTest {
                 Integer rightOperand = operands.removeLast();
                 Integer leftOperand = operands.removeLast();
 
-                IntBinaryOperator operator;
-                if (symbol.endsWith("-")) {
-                    operator = Math::subtractExact;
-                } else {
-                    operator = Math::addExact;
-                }
+                IntBinaryOperator operator = toOperator();
 
                 operands.addLast(operator.applyAsInt(leftOperand, rightOperand));
             }
         }
 
-        int toOperand() {
+        private int toOperand() {
             return parseInt(symbol);
         }
 
-        boolean isOperand() {
+        private IntBinaryOperator toOperator() {
+            IntBinaryOperator operator;
+            if (symbol.endsWith("-")) {
+                operator = Math::subtractExact;
+            } else {
+                operator = Math::addExact;
+            }
+            return operator;
+        }
+
+        private boolean isOperand() {
             return symbol.matches("^[0-9]+$");
         }
     }
