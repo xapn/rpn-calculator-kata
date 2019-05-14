@@ -42,13 +42,14 @@ class RpnCalculatorTest {
 
     @Test
     void should_add_2_operands() {
-        resultOf(() -> compute("1 2")).isEqualTo(3);
+        resultOf(() -> compute("1 2 +")).isEqualTo(3);
     }
 
     Integer compute(String expression) {
         return Pattern
                 .compile(" ")
                 .splitAsStream(expression)
+                .filter(symbol -> symbol.matches("^[0-9]+$"))
                 .mapToInt(Integer::parseInt)
                 .sum();
     }
