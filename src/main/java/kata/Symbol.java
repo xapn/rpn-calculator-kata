@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -30,15 +30,20 @@ import static java.lang.Integer.parseInt;
 
 class Symbol {
 
+    private static final String DIGITS_REGEX = "^[0-9]+$";
     private static final Map<String, IntBinaryOperator> OPERATORS;
+    private static final String PLUS = "+";
+    private static final String MINUS = "-";
+    private static final String STAR = "*";
+    private static final String SLASH = "/";
 
     static {
         OPERATORS = new HashMap<String, IntBinaryOperator>(4) {
             {
-                put("+", Math::addExact);
-                put("-", Math::subtractExact);
-                put("*", Math::multiplyExact);
-                put("/", Math::floorDiv);
+                put(PLUS, Math::addExact);
+                put(MINUS, Math::subtractExact);
+                put(STAR, Math::multiplyExact);
+                put(SLASH, Math::floorDiv);
             }
         };
     }
@@ -69,6 +74,6 @@ class Symbol {
     }
 
     private boolean isOperand() {
-        return symbol.matches("^[0-9]+$");
+        return symbol.matches(DIGITS_REGEX);
     }
 }
