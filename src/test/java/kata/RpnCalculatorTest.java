@@ -104,11 +104,11 @@ class RpnCalculatorTest {
 
         private IntBinaryOperator toOperator() {
             IntBinaryOperator operator;
-            if (symbol.endsWith("-")) {
+            if ("-".equals(symbol)) {
                 operator = Math::subtractExact;
-            } else if (symbol.endsWith("*")) {
+            } else if ("*".equals(symbol)) {
                 operator = Math::multiplyExact;
-            } else if (symbol.endsWith("/")) {
+            } else if ("/".equals(symbol)) {
                 operator = Math::floorDiv;
             } else {
                 operator = Math::addExact;
