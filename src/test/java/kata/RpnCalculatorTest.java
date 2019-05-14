@@ -24,17 +24,22 @@ package kata;
 
 import org.junit.jupiter.api.Test;
 
+import static java.lang.Integer.parseInt;
 import static testasyouthink.TestAsYouThink.resultOf;
 
 class RpnCalculatorTest {
 
     @Test
     void should_return_the_value_given_no_operator() {
-        resultOf(() -> compute()).isEqualTo(0);
+        resultOf(() -> compute("0")).isEqualTo(0);
     }
 
-    Integer compute() {
-        String expression = "0";
-        return 0;
+    @Test
+    void should_return_another_value_given_no_operator() {
+        resultOf(() -> compute("1")).isEqualTo(1);
+    }
+
+    Integer compute(String expression) {
+        return parseInt(expression);
     }
 }
