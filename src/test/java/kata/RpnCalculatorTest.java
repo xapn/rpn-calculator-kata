@@ -30,9 +30,11 @@ class RpnCalculatorTest {
 
     @Test
     void should_return_the_value_given_no_operator() {
-        resultOf(() -> {
-            String expression = "0";
-            return new Integer(0);
-        }).isEqualTo(0);
+        resultOf(() -> compute()).isEqualTo(0);
+    }
+
+    Integer compute() {
+        String expression = "0";
+        return 0;
     }
 }
