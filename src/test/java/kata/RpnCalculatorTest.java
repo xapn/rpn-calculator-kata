@@ -56,6 +56,11 @@ class RpnCalculatorTest {
         resultOf(() -> compute("5 3 -")).isEqualTo(2);
     }
 
+    @Test
+    void should_multiply_2_operands() {
+        resultOf(() -> compute("2 4 *")).isEqualTo(8);
+    }
+
     Integer compute(String expression) {
         Deque<Integer> operands = new ArrayDeque<>();
 
@@ -96,6 +101,8 @@ class RpnCalculatorTest {
             IntBinaryOperator operator;
             if (symbol.endsWith("-")) {
                 operator = Math::subtractExact;
+            } else if (symbol.endsWith("*")) {
+                operator = Math::multiplyExact;
             } else {
                 operator = Math::addExact;
             }
