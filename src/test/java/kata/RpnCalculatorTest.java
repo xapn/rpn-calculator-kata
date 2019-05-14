@@ -24,6 +24,8 @@ package kata;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.function.IntBinaryOperator;
 import java.util.regex.Pattern;
 
@@ -55,20 +57,14 @@ class RpnCalculatorTest {
     }
 
     Integer compute(String expression) {
-        IntBinaryOperator operator;
-        if (expression.endsWith("-")) {
-            operator = Math::subtractExact;
-        } else {
-            operator = Math::addExact;
-        }
+        Deque<Integer> operands = new ArrayDeque<>();
 
-        return Pattern
+        Pattern
                 .compile(SYMBOL_SEPARATOR)
                 .splitAsStream(expression)
                 .map(Symbol::new)
-                .mapToInt(Symbol::compute)
-                .reduce(operator)
-                .getAsInt();
+                .forEach(symbol -> symbol.compute(operands));
+        return operands.removeLast();
     }
 
     static class Symbol {
@@ -79,8 +75,22 @@ class RpnCalculatorTest {
             this.symbol = symbol;
         }
 
-        Integer compute() {
-            return isOperand() ? toOperand() : 0;
+        void compute(Deque<Integer> operands) {
+            if (isOperand()) {
+                operands.addLast(toOperand());
+            } else {
+                Integer rightOperand = operands.removeLast();
+                Integer leftOperand = operands.removeLast();
+
+                IntBinaryOperator operator;
+                if (symbol.endsWith("-")) {
+                    operator = Math::subtractExact;
+                } else {
+                    operator = Math::addExact;
+                }
+
+                operands.addLast(operator.applyAsInt(leftOperand, rightOperand));
+            }
         }
 
         int toOperand() {
