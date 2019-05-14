@@ -24,6 +24,7 @@ package kata;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.function.IntBinaryOperator;
 import java.util.regex.Pattern;
 
 import static java.lang.Integer.parseInt;
@@ -48,13 +49,26 @@ class RpnCalculatorTest {
         resultOf(() -> compute("1 2 +")).isEqualTo(3);
     }
 
+    @Test
+    void should_subtract_2_operands() {
+        resultOf(() -> compute("5 3 -")).isEqualTo(2);
+    }
+
     Integer compute(String expression) {
+        IntBinaryOperator operator;
+        if (expression.endsWith("-")) {
+            operator = Math::subtractExact;
+        } else {
+            operator = Math::addExact;
+        }
+
         return Pattern
                 .compile(SYMBOL_SEPARATOR)
                 .splitAsStream(expression)
                 .map(Symbol::new)
                 .mapToInt(Symbol::compute)
-                .sum();
+                .reduce(operator)
+                .getAsInt();
     }
 
     static class Symbol {
