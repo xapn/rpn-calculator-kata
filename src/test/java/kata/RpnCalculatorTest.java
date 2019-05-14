@@ -26,6 +26,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.regex.Pattern;
 
+import static java.lang.Integer.parseInt;
 import static testasyouthink.TestAsYouThink.resultOf;
 
 class RpnCalculatorTest {
@@ -51,16 +52,26 @@ class RpnCalculatorTest {
         return Pattern
                 .compile(SYMBOL_SEPARATOR)
                 .splitAsStream(expression)
-                .filter(this::isOperand)
-                .mapToInt(this::toOperand)
+                .map(Symbol::new)
+                .filter(Symbol::isOperand)
+                .mapToInt(Symbol::toOperand)
                 .sum();
     }
 
-    private int toOperand(String symbol) {
-        return Integer.parseInt(symbol);
-    }
+    static class Symbol {
 
-    private boolean isOperand(String symbol) {
-        return symbol.matches("^[0-9]+$");
+        private final String symbol;
+
+        Symbol(String symbol) {
+            this.symbol = symbol;
+        }
+
+        int toOperand() {
+            return parseInt(symbol);
+        }
+
+        boolean isOperand() {
+            return symbol.matches("^[0-9]+$");
+        }
     }
 }
