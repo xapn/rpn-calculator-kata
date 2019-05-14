@@ -22,7 +22,6 @@
 
 package kata;
 
-import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.IntBinaryOperator;
@@ -50,14 +49,14 @@ class Symbol {
         this.symbol = symbol;
     }
 
-    void compute(Deque<Integer> operands) {
+    void compute(Lifo operands) {
         if (isOperand()) {
-            operands.addLast(toOperand());
+            operands.push(toOperand());
         } else {
-            Integer rightOperand = operands.removeLast();
-            Integer leftOperand = operands.removeLast();
+            Integer rightOperand = operands.pull();
+            Integer leftOperand = operands.pull();
             IntBinaryOperator operator = toOperator();
-            operands.addLast(operator.applyAsInt(leftOperand, rightOperand));
+            operands.push(operator.applyAsInt(leftOperand, rightOperand));
         }
     }
 
