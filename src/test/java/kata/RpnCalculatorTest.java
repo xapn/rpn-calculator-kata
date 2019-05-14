@@ -53,8 +53,7 @@ class RpnCalculatorTest {
                 .compile(SYMBOL_SEPARATOR)
                 .splitAsStream(expression)
                 .map(Symbol::new)
-                .filter(Symbol::isOperand)
-                .mapToInt(Symbol::toOperand)
+                .mapToInt(Symbol::compute)
                 .sum();
     }
 
@@ -64,6 +63,10 @@ class RpnCalculatorTest {
 
         Symbol(String symbol) {
             this.symbol = symbol;
+        }
+
+        Integer compute() {
+            return isOperand() ? toOperand() : 0;
         }
 
         int toOperand() {
